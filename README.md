@@ -2,6 +2,7 @@
 
 A web-based Student Attendance Management System for managing and viewing subject-wise student attendance.
 
+
 ## 🚀 Features
 
 - Admin login and dashboard
@@ -35,3 +36,8 @@ Smart-Attendance-Manager/
     ├── Procfile
     ├── static/
     └── templates/
+
+## 🔗 Project Links
+
+- 🌐 **Live Demo:** https://smart-attendance-manager-czeq.onrender.com/
+- 💻 **GitHub Repository:** https://github.com/byraswathisrisai-bot/Smart-Attendance-Manager
