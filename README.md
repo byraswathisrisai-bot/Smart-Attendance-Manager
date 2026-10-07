@@ -1,6 +1,3 @@
-# Smart-Attendance-Manager
-Web-based Student Attendance Management System for managing and viewing subject-wise student attendance.
-
 # Smart Attendance Manager
 
 A web-based Student Attendance Management System for managing and viewing subject-wise student attendance.
