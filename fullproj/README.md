@@ -1,8 +1,12 @@
 # Smart Attendance Manager
 
-A beginner-friendly Flask + SQLite attendance management project.
+A beginner-friendly Flask + SQLite web application for managing student attendance.
 
-## Features
+## 🌐 Live Demo
+
+[Open Smart Attendance Manager](https://smart-attendance-manager-czeq.onrender.com/)
+
+## ✨ Features
 
 - Student login and dashboard
 - Admin/faculty dashboard
@@ -15,29 +19,39 @@ A beginner-friendly Flask + SQLite attendance management project.
 - Attendance prediction information
 - AJAX admin actions without page reload or scroll jumping
 
-## Demo login
+## 🔐 Demo Login
 
-Student:
-- Email: `student@college.com`
-- Password: `student123`
+### Student
 
-Admin:
-- Email: `admin@college.com`
-- Password: `admin123`
+- **Email:** `student@college.com`
+- **Password:** `student123`
 
-## Run on Windows
+### Admin
 
-Open PowerShell inside the project folder:
+- **Email:** `admin@college.com`
+- **Password:** `admin123`
 
-```powershell
-py -m pip install -r requirements.txt
-py app.py
-```
+> ⚠️ These are demo credentials for this beginner project. Do not use them for a production application.
 
-Then open:
+## 🛠️ Technologies Used
 
-`http://127.0.0.1:5000`
+- Python
+- Flask
+- SQLite
+- HTML5
+- CSS3
+- JavaScript
+- Jinja2
+- Gunicorn
 
-## Important
+## 📁 Project Structure
 
-The application creates `attendance.db` automatically when it starts. If you already have an attendance database, keep your existing `attendance.db` instead of replacing it.
+```text
+Smart-Attendance-Manager/
+└── fullproj/
+    ├── app.py
+    ├── attendance.db
+    ├── requirements.txt
+    ├── Procfile
+    ├── static/
+    └── templates/
