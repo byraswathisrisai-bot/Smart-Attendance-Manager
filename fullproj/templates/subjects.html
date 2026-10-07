@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Subjects{% endblock %}
+{% block content %}
+<h2>Subjects 📚</h2>
+
+{% if session.get('role') == 'admin' %}
+<div class="card p-4 mb-4">
+    <h4>Add Subject</h4>
+    <form method="post" class="row g-3 mt-1">
+        <div class="col-md-5"><input type="text" name="name" class="form-control" placeholder="Subject name" required></div>
+        <div class="col-md-4"><input type="text" name="code" class="form-control" placeholder="Subject code" required></div>
+        <div class="col-md-3"><button class="btn btn-primary w-100">Add Subject</button></div>
+    </form>
+</div>
+{% endif %}
+
+<div class="row g-3">
+{% for s in subjects %}
+    <div class="col-md-4">
+        <div class="card p-4 h-100">
+            <h4>{{ s.name }}</h4>
+            <p class="text-muted">{{ s.code }}</p>
+            <p><b>Total Classes:</b> {{ s.total_classes }}</p>
+            {% if session.get('role') == 'admin' %}
+            <form method="post" action="{{ url_for('delete_subject', subject_id=s.id) }}" onsubmit="return confirm('Delete this subject?');">
+                <button class="btn btn-danger">Delete</button>
+            </form>
+            {% endif %}
+        </div>
+    </div>
+{% else %}
+    <div class="col-12"><div class="alert alert-info">No subjects available.</div></div>
+{% endfor %}
+</div>
+{% endblock %}

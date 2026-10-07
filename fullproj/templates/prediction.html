@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Attendance Prediction{% endblock %}
+{% block content %}
+<h2>Attendance Prediction 📊</h2>
+<p class="text-muted">Attendance information for each subject.</p>
+<div class="row g-3">
+{% for s in data %}
+    <div class="col-md-6">
+        <div class="card p-4 h-100">
+            <h4>{{ s.name }}</h4>
+            <p class="text-muted">{{ s.code }}</p>
+            <p><b>Present:</b> {{ s.attended }}</p>
+            <p><b>Absent:</b> {{ s.absent }}</p>
+            <p><b>Total:</b> {{ s.total }}</p>
+            <p><b>Percentage:</b> {{ s.percentage }}%</p>
+            <p><b>Status:</b> {{ s.status }}</p>
+            <p><b>Classes you can miss:</b> {{ s.can_miss }}</p>
+            <p><b>Classes needed to reach 75%:</b> {{ s.need }}</p>
+        </div>
+    </div>
+{% else %}
+    <div class="col-12"><div class="alert alert-info">No attendance data available.</div></div>
+{% endfor %}
+</div>
+{% endblock %}

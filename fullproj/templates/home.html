@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Home - Smart Attendance Manager{% endblock %}
+{% block content %}
+<div class="hero text-center p-5 rounded-4">
+    <h1>Smart Attendance Manager 📚</h1>
+    <p class="lead">Manage classes and track student attendance easily.</p>
+    {% if session.get('user_id') %}
+        {% if session.get('role') == 'admin' %}
+            <a href="{{ url_for('admin') }}" class="btn btn-primary btn-lg">Open Admin Dashboard</a>
+        {% else %}
+            <a href="{{ url_for('dashboard') }}" class="btn btn-primary btn-lg">Open Student Dashboard</a>
+        {% endif %}
+    {% else %}
+        <a href="{{ url_for('login') }}" class="btn btn-primary btn-lg">Login</a>
+    {% endif %}
+</div>
+
+<div class="row g-4 mt-3">
+    <div class="col-md-4"><div class="card p-4 h-100"><h4>📅 Classes</h4><p>Conduct classes and keep class sessions organized.</p></div></div>
+    <div class="col-md-4"><div class="card p-4 h-100"><h4>✅ Attendance</h4><p>Mark each class as Present or Absent.</p></div></div>
+    <div class="col-md-4"><div class="card p-4 h-100"><h4>📊 Reports</h4><p>View attendance percentage and status.</p></div></div>
+</div>
+{% endblock %}

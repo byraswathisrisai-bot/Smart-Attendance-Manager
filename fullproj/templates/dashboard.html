@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Student Dashboard{% endblock %}
+{% block content %}
+<h2>Student Dashboard 👨‍🎓</h2>
+<p class="text-muted">Welcome, {{ session.get('name') }}.</p>
+
+<div class="row g-3 mb-4">
+    <div class="col-md-4"><div class="card p-3"><h5>Overall Attendance</h5><div class="display-6">{{ overall }}%</div></div></div>
+    <div class="col-md-4"><div class="card p-3"><h5>Status</h5><div class="display-6">{{ status }}</div></div></div>
+    <div class="col-md-4"><div class="card p-3"><h5>Can Miss</h5><div class="display-6">{{ can_miss }}</div></div></div>
+</div>
+
+<div class="card p-4">
+    <h4>Subject Attendance</h4>
+    <div class="table-responsive">
+        <table class="table table-striped align-middle mt-3">
+            <thead><tr><th>Subject</th><th>Code</th><th>Present</th><th>Absent</th><th>Total</th><th>Percentage</th><th>Status</th></tr></thead>
+            <tbody>
+            {% for s in subjects %}
+                <tr>
+                    <td>{{ s.name }}</td><td>{{ s.code }}</td><td>{{ s.attended }}</td><td>{{ s.absent }}</td><td>{{ s.total }}</td><td>{{ s.percentage }}%</td><td>{{ s.status }}</td>
+                </tr>
+            {% else %}
+                <tr><td colspan="7" class="text-center">No subjects available.</td></tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <p class="text-muted mb-0">Classes needed to reach 75% overall: {{ need }}</p>
+</div>
+{% endblock %}

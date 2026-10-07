@@ -1,0 +1,35 @@
+body {
+    background: #f5f7fb;
+    color: #222;
+}
+
+.navbar {
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.card {
+    border: none;
+    border-radius: 14px;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.07);
+}
+
+.hero {
+    background: linear-gradient(135deg, #e8efff, #f7ecff);
+}
+
+.hero h1 {
+    font-weight: 700;
+    margin-bottom: 15px;
+}
+
+.display-6 {
+    font-weight: 700;
+}
+
+.table th {
+    white-space: nowrap;
+}
+
+form .btn {
+    border-radius: 8px;
+}

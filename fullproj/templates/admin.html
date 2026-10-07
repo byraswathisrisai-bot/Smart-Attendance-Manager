@@ -1,0 +1,576 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+
+<h2>Faculty / Admin Dashboard 👨‍🏫</h2>
+
+<p class="text-muted">
+    Manage subjects, classes and student attendance.
+</p>
+
+<div id="adminMessage"></div>
+
+
+<!-- SUMMARY -->
+
+<div class="row g-3 mt-2">
+
+    <div class="col-md-4">
+        <div class="card p-3">
+            <h5>Users</h5>
+            <div class="display-6" id="userCount">
+                {{ users|length }}
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card p-3">
+            <h5>Subjects</h5>
+            <div class="display-6" id="subjectCount">
+                {{ subjects|length }}
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card p-3">
+            <h5>Total Classes</h5>
+            <div class="display-6" id="totalClassCount">
+                {{ subjects|sum(attribute='total_classes') }}
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<!-- CLASS MANAGEMENT -->
+
+<div class="card p-4 mt-4">
+
+    <h4 class="mb-2">
+        Class Management 📚
+    </h4>
+
+    <p class="text-muted">
+        Modify the number of classes or conduct one class at a time.
+    </p>
+
+    <div class="row g-3" id="classManagementList">
+
+        {% for s in subjects %}
+
+        <div class="col-md-6">
+
+            <div class="card border p-3 h-100">
+
+                <h5>
+                    {{ s.name }}
+                </h5>
+
+                <p class="text-muted mb-2">
+                    {{ s.code }}
+                </p>
+
+                <p>
+                    <b>Total Classes:</b>
+
+                    <span
+                        class="badge bg-primary class-total"
+                        data-subject-id="{{ s.id }}"
+                    >
+                        {{ s.total_classes }}
+                    </span>
+                </p>
+
+                <!-- MODIFY NUMBER OF CLASSES -->
+
+                <form
+                    method="post"
+                    action="{{ url_for('modify_classes', subject_id=s.id) }}"
+                    class="mb-3 ajax-form"
+                >
+
+                    <label class="form-label">
+                        Modify Number of Classes
+                    </label>
+
+                    <div class="input-group">
+
+                        <input
+                            type="number"
+                            name="total_classes"
+                            value="{{ s.total_classes }}"
+                            min="0"
+                            class="form-control class-input"
+                            required
+                        >
+
+                        <button
+                            type="submit"
+                            class="btn btn-primary"
+                        >
+                            Modify
+                        </button>
+
+                    </div>
+
+                </form>
+
+                <!-- CONDUCT CLASS -->
+
+                <form
+                    method="post"
+                    action="{{ url_for('conduct_class', subject_id=s.id) }}"
+                    class="ajax-form"
+                >
+
+                    <button
+                        type="submit"
+                        class="btn btn-success w-100"
+                    >
+                        + Conduct Class
+                    </button>
+
+                </form>
+
+            </div>
+
+        </div>
+
+        {% else %}
+
+        <div class="col-12">
+
+            <div class="alert alert-info">
+                No subjects available.
+            </div>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+</div>
+
+
+<!-- STUDENT ATTENDANCE -->
+
+<div class="card p-4 mt-4">
+
+    <h4 class="mb-2">
+        Give Student Attendance 👨‍🎓
+    </h4>
+
+    <p class="text-muted">
+        Only the next unmarked class is shown for each subject.
+    </p>
+
+    <div class="row g-3" id="attendanceList">
+
+        {% for c in classes %}
+
+        <div class="col-md-6">
+
+            <div class="card border p-3">
+
+                <h5>
+                    {{ c.name }}
+                </h5>
+
+                <p class="text-muted">
+                    {{ c.code }}
+                </p>
+
+                <div class="mb-3">
+
+                    <span class="badge bg-secondary">
+                        Class {{ c.class_number }}
+                    </span>
+
+                </div>
+
+                <div class="d-flex gap-2">
+
+                    <!-- PRESENT -->
+
+                    <form
+                        method="post"
+                        action="{{ url_for(
+                            'admin_mark_attendance',
+                            class_id=c.id,
+                            status_value='present'
+                        ) }}"
+                        class="ajax-form"
+                    >
+
+                        <button
+                            type="submit"
+                            class="btn btn-success"
+                        >
+                            Present
+                        </button>
+
+                    </form>
+
+                    <!-- ABSENT -->
+
+                    <form
+                        method="post"
+                        action="{{ url_for(
+                            'admin_mark_attendance',
+                            class_id=c.id,
+                            status_value='absent'
+                        ) }}"
+                        class="ajax-form"
+                    >
+
+                        <button
+                            type="submit"
+                            class="btn btn-danger"
+                        >
+                            Absent
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        {% else %}
+
+        <div class="col-12">
+
+            <div class="alert alert-info">
+                No pending attendance.
+                <br>
+                Conduct a class first.
+            </div>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+</div>
+
+
+<!-- REGISTERED USERS -->
+
+<div class="card p-4 mt-4">
+
+    <h4>
+        Registered Users
+    </h4>
+
+    <div class="table-responsive">
+
+        <table class="table">
+
+            <thead>
+
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+            {% for u in users %}
+
+                <tr>
+                    <td>{{ u.name }}</td>
+                    <td>{{ u.email }}</td>
+                    <td>{{ u.role }}</td>
+                </tr>
+
+            {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+
+<!-- NO PAGE RELOAD SCRIPT -->
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const messageBox =
+        document.getElementById("adminMessage");
+
+    function showMessage(message, category) {
+
+        messageBox.innerHTML = `
+            <div class="alert alert-${category} mt-3">
+                ${message}
+            </div>
+        `;
+
+        setTimeout(function () {
+            messageBox.innerHTML = "";
+        }, 2500);
+    }
+
+
+    async function refreshAdminData() {
+
+        const response =
+            await fetch("{{ url_for('admin_data') }}");
+
+        const data = await response.json();
+
+        if (!data.success) {
+            return;
+        }
+
+
+        /* UPDATE SUMMARY */
+
+        document.getElementById("userCount").textContent =
+            data.users_count;
+
+        document.getElementById("subjectCount").textContent =
+            data.subjects.length;
+
+        let totalClasses = 0;
+
+        data.subjects.forEach(function (subject) {
+            totalClasses += subject.total_classes;
+        });
+
+        document.getElementById("totalClassCount").textContent =
+            totalClasses;
+
+
+        /* UPDATE CLASS TOTALS */
+
+        data.subjects.forEach(function (subject) {
+
+            const badge = document.querySelector(
+                '.class-total[data-subject-id="' +
+                subject.id +
+                '"]'
+            );
+
+            if (badge) {
+                badge.textContent =
+                    subject.total_classes;
+            }
+
+            const card =
+                badge ? badge.closest(".card") : null;
+
+            if (card) {
+
+                const input =
+                    card.querySelector(".class-input");
+
+                if (input) {
+                    input.value =
+                        subject.total_classes;
+                }
+
+            }
+
+        });
+
+
+        /* UPDATE ATTENDANCE CARDS */
+
+        const attendanceList =
+            document.getElementById("attendanceList");
+
+        attendanceList.innerHTML = "";
+
+
+        if (data.classes.length === 0) {
+
+            attendanceList.innerHTML = `
+                <div class="col-12">
+                    <div class="alert alert-info">
+                        No pending attendance.
+                        <br>
+                        Conduct a class first.
+                    </div>
+                </div>
+            `;
+
+            return;
+        }
+
+
+        data.classes.forEach(function (c) {
+
+            attendanceList.innerHTML += `
+
+                <div class="col-md-6">
+
+                    <div class="card border p-3">
+
+                        <h5>
+                            ${c.name}
+                        </h5>
+
+                        <p class="text-muted">
+                            ${c.code}
+                        </p>
+
+                        <div class="mb-3">
+
+                            <span class="badge bg-secondary">
+                                Class ${c.class_number}
+                            </span>
+
+                        </div>
+
+                        <div class="d-flex gap-2">
+
+                            <form
+                                method="post"
+                                action="/admin/attendance/${c.id}/present"
+                                class="ajax-form"
+                            >
+
+                                <button
+                                    type="submit"
+                                    class="btn btn-success"
+                                >
+                                    Present
+                                </button>
+
+                            </form>
+
+                            <form
+                                method="post"
+                                action="/admin/attendance/${c.id}/absent"
+                                class="ajax-form"
+                            >
+
+                                <button
+                                    type="submit"
+                                    class="btn btn-danger"
+                                >
+                                    Absent
+                                </button>
+
+                            </form>
+
+                        </div>
+
+                    </div>
+
+                </div>
+            `;
+        });
+
+        attachAjaxForms();
+    }
+
+
+    function attachAjaxForms() {
+
+        document.querySelectorAll(".ajax-form").forEach(function (form) {
+
+            if (form.dataset.ajaxAttached === "true") {
+                return;
+            }
+
+            form.dataset.ajaxAttached = "true";
+
+
+            form.addEventListener("submit", async function (event) {
+
+                event.preventDefault();
+
+
+                const button =
+                    form.querySelector("button[type='submit']");
+
+                if (button) {
+                    button.disabled = true;
+                }
+
+
+                try {
+
+                    const response =
+                        await fetch(
+                            form.action,
+                            {
+                                method: "POST",
+                                body: new FormData(form),
+                                headers: {
+                                    "X-Requested-With":
+                                        "XMLHttpRequest"
+                                }
+                            }
+                        );
+
+
+                    const data =
+                        await response.json();
+
+
+                    if (data.message) {
+
+                        showMessage(
+                            data.message,
+                            data.category || "success"
+                        );
+
+                    }
+
+
+                    if (data.success) {
+
+                        await refreshAdminData();
+
+                    }
+
+
+                } catch (error) {
+
+                    showMessage(
+                        "Something went wrong. Please try again.",
+                        "danger"
+                    );
+
+                }
+
+
+                if (button) {
+                    button.disabled = false;
+                }
+
+            });
+
+        });
+
+    }
+
+
+    /* Attach AJAX to all existing Admin forms */
+    attachAjaxForms();
+
+});
+
+</script>
+
+{% endblock %}
